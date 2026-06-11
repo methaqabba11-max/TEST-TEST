@@ -15,7 +15,7 @@ RUN mkdir -p $CARGO_TARGET_DIR
 RUN cargo new --lib --vcs none /tmp/wm_sol && \
     cargo new --lib --vcs none /tmp/wm_test && \
     echo 'pub fn add(a:i32,b:i32)->i32{a+b}' > /tmp/wm_sol/src/lib.rs && \
-    printf '\n[dependencies]\nwm_sol={path="/tmp/wm_sol"}\n' >> /tmp/wm_test/Cargo.toml && \
+    printf 'wm_sol={path="/tmp/wm_sol"}\n' >> /tmp/wm_test/Cargo.toml && \
     printf 'use wm_sol::add;\n#[test]\nfn t(){assert_eq!(add(1,2),3);}' > /tmp/wm_test/src/lib.rs && \
     cargo test --manifest-path /tmp/wm_test/Cargo.toml && \
     rm -rf /tmp/wm_sol /tmp/wm_test
