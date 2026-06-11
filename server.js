@@ -126,11 +126,25 @@ app.post("/api/test", async (req, res) => {
     const testManifest = path.join(tmpDir, "tests", `${ex.name}_test`, "Cargo.toml");
     const cmd = `cargo test --manifest-path "${testManifest}" 2>&1`;
 
+    // On Linux/Docker ensure cargo is on PATH; on Windows it's already there
+    const extraPath = process.platform === "win32"
+      ? ""
+      : "/usr/local/cargo/bin:/usr/local/rustup/bin:";
+    const env = {
+      ...process.env,
+      PATH: extraPath + (process.env.PATH || ""),
+    };
+    if (process.platform !== "win32") {
+      env.CARGO_TARGET_DIR = process.env.CARGO_TARGET_DIR || "/cargo-target";
+      env.CARGO_HOME = process.env.CARGO_HOME || "/usr/local/cargo";
+      env.RUSTUP_HOME = process.env.RUSTUP_HOME || "/usr/local/rustup";
+    }
+
     let output;
     try {
-      output = execSync(cmd, { timeout: 60000, encoding: "utf-8", maxBuffer: 1024 * 1024 });
+      output = execSync(cmd, { timeout: 120000, encoding: "utf-8", maxBuffer: 4 * 1024 * 1024, env });
     } catch (err) {
-      output = err.stdout || err.stderr || err.message;
+      output = (err.stdout || "") + (err.stderr || "") || err.message;
     }
 
     const passed = parseTestResults(output);
