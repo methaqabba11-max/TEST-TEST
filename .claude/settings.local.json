@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm --version)",
+      "Bash(rustc --version)",
+      "Bash(cargo --version)",
+      "Bash(npm install *)",
+      "Bash(curl -s http://localhost:3000/api/exercises)",
+      "Bash(node server.js)",
+      "mcp__Claude_in_Chrome__tabs_context_mcp",
+      "Bash(mkdir -p \"C:/Users/alish/Desktop/FINAL-RUST/.claude\")",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(netstat -ano)",
+      "Bash(findstr :3000)"
+    ]
+  }
+}
