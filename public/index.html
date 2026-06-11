@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rust Final Checkpoint</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/theme/material-darker.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-top">
+        <div class="logo">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          <span>Rust Checkpoint</span>
+          <button class="toggle-btn sidebar-close-btn" id="btnCloseSidebar" title="Hide exercise panel">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
+          <span class="progress-label" id="progressLabel">0/0</span>
+        </div>
+      </div>
+      <nav class="exercise-nav" id="exerciseNav"></nav>
+    </aside>
+
+    <!-- MAIN -->
+    <div class="main-area">
+      <!-- TOP BAR -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="toggle-subject-btn" id="btnOpenSidebar" title="Show exercise panel" style="display:none">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+            <span>Exercises</span>
+          </button>
+          <h2 id="exTitle">Select an exercise</h2>
+          <div class="tags" id="exTags"></div>
+        </div>
+        <div class="topbar-right">
+          <span class="shortcut"><kbd>Ctrl</kbd>+<kbd>Enter</kbd> to run</span>
+          <button class="btn ghost" id="btnReset" disabled>Reset</button>
+          <button class="btn primary" id="btnRun" disabled>
+            <span class="btn-label">Run Tests</span>
+            <div class="btn-spinner"></div>
+          </button>
+        </div>
+      </header>
+
+      <!-- CONTENT -->
+      <div class="content">
+        <!-- SUBJECT PANEL (collapsible left) -->
+        <div class="subject-panel" id="subjectPanel">
+          <div class="panel-head">
+            <span>Subject</span>
+            <button class="toggle-btn" id="btnCloseSubject" title="Hide subject panel">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
+          </div>
+          <div class="panel-body markdown" id="subjectBody">
+            <p class="muted">Select an exercise to view its description.</p>
+          </div>
+        </div>
+
+        <!-- RESIZER -->
+        <div class="resizer" id="resizer"></div>
+
+        <!-- CENTER+BOTTOM: Editor stacked above output -->
+        <div class="editor-output-stack">
+          <!-- Code editor -->
+          <div class="editor-area">
+            <div class="panel editor-panel">
+              <div class="panel-head">
+                <div class="editor-head-left">
+                  <button class="toggle-subject-btn" id="btnOpenSubject" title="Show subject panel" style="display:none">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                    <span>Subject</span>
+                  </button>
+                  <span id="fileLabel">lib.rs</span>
+                </div>
+                <span class="status-pill" id="statusPill"></span>
+              </div>
+              <div class="editor-wrap">
+                <textarea id="editor"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Horizontal resizer -->
+          <div class="h-resizer" id="hResizer"></div>
+
+          <!-- Test output (below editor) -->
+          <div class="output-area">
+            <div class="panel output-panel">
+              <div class="panel-head">
+                <span>Test Output</span>
+                <div class="result-pills" id="resultPills"></div>
+              </div>
+              <pre class="output-body" id="outputBody">Click "Run Tests" or press Ctrl+Enter to test your code.</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/mode/rust/rust.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/addon/edit/closebrackets.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/addon/edit/matchbrackets.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/addon/comment/comment.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked@15.0.0/marked.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
