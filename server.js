@@ -124,13 +124,29 @@ app.post("/api/test", async (req, res) => {
     fs.writeFileSync(path.join(testDir, testSrcFile), ex.testCode);
 
     const testManifest = path.join(tmpDir, "tests", `${ex.name}_test`, "Cargo.toml");
-    const cmd = `cargo test --manifest-path "${testManifest}" 2>&1`;
+    const cargoPath = process.env.CARGO_HOME
+      ? `${process.env.CARGO_HOME}/bin/cargo`
+      : "/usr/local/cargo/bin/cargo";
+    const cmd = `"${cargoPath}" test --manifest-path "${testManifest}"`;
 
     let output;
     try {
-      output = execSync(cmd, { timeout: 60000, encoding: "utf-8", maxBuffer: 1024 * 1024 });
+      const result = execSync(cmd, {
+        timeout: 120000,
+        encoding: "utf-8",
+        maxBuffer: 4 * 1024 * 1024,
+        stdio: ["ignore", "pipe", "pipe"],
+        env: {
+          ...process.env,
+          PATH: `/usr/local/cargo/bin:/usr/local/rustup/bin:${process.env.PATH || "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"}`,
+          CARGO_TARGET_DIR: process.env.CARGO_TARGET_DIR || "/cargo-target",
+          CARGO_HOME: process.env.CARGO_HOME || "/usr/local/cargo",
+          RUSTUP_HOME: process.env.RUSTUP_HOME || "/usr/local/rustup",
+        },
+      });
+      output = result;
     } catch (err) {
-      output = err.stdout || err.stderr || err.message;
+      output = (err.stdout || "") + (err.stderr || "") || err.message;
     }
 
     const passed = parseTestResults(output);
